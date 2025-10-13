@@ -142,7 +142,7 @@ public class PanelJuego extends JPanel implements ActionListener {
         this.timer.stop(); //encargado de detener las caidas de las piezas
         piezaActual = null; //evita que siga dibujando piezas
         repaint();
-        JOptionPane.showMessageDialog(this,"Fin del juego");
+        JOptionPane.showMessageDialog(this,mensaje);
     }
 
     //Metodo encargado del equilibrio de la plataforma
