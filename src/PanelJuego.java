@@ -18,6 +18,7 @@ public class PanelJuego extends JPanel implements ActionListener {
 
     //plataforma
     private double anguloPlataforma = 0.0;
+    private final double anguloMaximo = 6.0;
     private final int anchoPlataforma = 200;
     private final int altoPlataforma = 20;
     private final int filaSuperficiePlataforma = (altoPanel-60 - altoPlataforma) / tamanioBloque; //calcula el nro de filas arriba de la plataforma
@@ -31,6 +32,7 @@ public class PanelJuego extends JPanel implements ActionListener {
 
     //Game Over
     private Timer timer;
+
 
 
     //Metodo para agregar bordes negros a las piezas
@@ -146,6 +148,8 @@ public class PanelJuego extends JPanel implements ActionListener {
     //Metodo encargado del equilibrio de la plataforma
     private void equilibrioPlataforma(){
         double desequilibrioTotal = 0;
+
+
         double centroPlataforma = (anchoTablero -1) / 2.0;
 
         //recorre toda la grilla para medir el peso de cada bloque
@@ -154,9 +158,10 @@ public class PanelJuego extends JPanel implements ActionListener {
                 if (tablero[fila][columna] != null){
                     double distanciaDelCentro = columna -centroPlataforma;
                     desequilibrioTotal += distanciaDelCentro;
-                }
+                  }
             }
         }
+
         //Convierte el desequilibrio en un angulo
         double nuevoAngulo = desequilibrioTotal * 0.5;
 
@@ -314,8 +319,12 @@ public class PanelJuego extends JPanel implements ActionListener {
                 finJuego("La pieza cayo fuera de la plataforma");
             }else {
                 equilibrioPlataforma();
+                if (Math.abs(anguloPlataforma )>anguloMaximo){
+                    finJuego("¡La plataforma se inclino fuera de los limites!");
+                }else {
+                    generarNuevaPieza();
+                }
 
-                generarNuevaPieza();
             }
         }
 
