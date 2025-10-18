@@ -1,5 +1,5 @@
 import javax.swing.JFrame;
-
+import javax.swing.SwingUtilities;
 
 public class Tetris extends JFrame {
     public Tetris() {
@@ -15,5 +15,11 @@ public class Tetris extends JFrame {
     }
     public static void main(String[] args) {
         new Tetris();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new VentanaPrincipal();
+            }
+        });
     }
 }

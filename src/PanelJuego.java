@@ -198,7 +198,7 @@ public class PanelJuego extends JPanel {
         g2d.setTransform(original);
 
         // Opcional: dibujar cuadrícula sin rotar (comentado)
-        /*
+
         g2d.setColor(Color.lightGray);
         for (int fila = 0; fila < altoTablero; fila++) {
             for (int columna = 0; columna < anchoTablero; columna++) {
@@ -207,7 +207,7 @@ public class PanelJuego extends JPanel {
                 g2d.drawRect(x, y, tamanioBloque, tamanioBloque);
             }
         }
-        */
+
     }
 
     /*------------------ Movimientos por teclado -----------------------*/
@@ -330,6 +330,14 @@ public class PanelJuego extends JPanel {
         jugadorActual.setPiezaActual(null);
         cambiarTurno();
         generarNuevaPiezaParaJugador(jugadorActual);
+    }
+
+    public Jugador getJugador1() {
+        return jugador1;
+    }
+
+    public Jugador getJugador2() {
+        return jugador2;
     }
 
     // Metodo cambio de turno

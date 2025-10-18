@@ -7,6 +7,8 @@ public class Jugador {
     private String nombre;
     private int puntaje;
     private PiezaPadre piezaActual;
+    private PiezaPadre piezaSiguiente;
+
 
     public Jugador(String nombre) {
         this.nombre = nombre;
@@ -28,5 +30,13 @@ public class Jugador {
 
     public void setPiezaActual(PiezaPadre piezaActual) {
         this.piezaActual = piezaActual;
+    }
+
+    public PiezaPadre getPiezaSiguiente() {
+        return piezaSiguiente;
+    }
+
+    public void setPiezaSiguiente(PiezaPadre piezaSiguiente) {
+        this.piezaSiguiente = piezaSiguiente;
     }
 }
