@@ -29,6 +29,15 @@ public class PanelJuego extends JPanel {
 
     private double anguloInclinacion = 0.0;  // Ángulo en radianes para la inclinación visual
 
+    private static final double inclinacionPermitido = 0.20;
+    private boolean finDelJuego = false;
+
+    //jugadores
+    private Jugador jugador1;
+    private Jugador jugador2;
+    private Jugador jugadorActual;
+
+
     /* ------------------ Constructor ---------------------------*/
     public PanelJuego() {
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
@@ -41,13 +50,21 @@ public class PanelJuego extends JPanel {
             pesoColumnas[i] = 0;
         }
 
+        jugador1 = new Jugador("Jugador 1");
+        jugador2 = new Jugador("Jugador 2");
+
+        jugadorActual = jugador1;
+        piezaActual = null;
+        generarNuevaPiezaParaJugador(jugadorActual);
+
         setFocusable(true);
         requestFocusInWindow(); // necesario para recibir eventos en teclado
         controlesTeclado();
-        generarNuevaPieza();
+        generarNuevaPiezaParaJugador(jugadorActual);
 
         new Timer(50, e -> actualizarMovimiento()).start();
     }
+
 
     // Inicializa la plataforma fija en el fondo
     private void inicializarPlataforma() {
@@ -74,36 +91,45 @@ public class PanelJuego extends JPanel {
     }
 
     // Genera una nueva pieza (por ahora solo PiezaI y PiezaJ)
-    private void generarNuevaPieza() {
+    private void generarNuevaPiezaParaJugador(Jugador jugador) {
         int indice = piezaAleatoria.nextInt(7);
+        PiezaPadre piezaNueva = null;
         switch (indice) {
             case 0:
-                piezaActual = new PiezaI();
+                piezaNueva = new PiezaI();
                 break;
             case 1:
-                piezaActual = new PiezaJ();
+                piezaNueva = new PiezaJ();
                 break;
             case 2:
-                piezaActual = new PiezaL();
+                piezaNueva = new PiezaL();
                 break;
             case 3:
-                piezaActual = new PiezaO();
+                piezaNueva = new PiezaO();
                 break;
             case 4:
-                piezaActual = new PiezaS();
+                piezaNueva = new PiezaS();
                 break;
             case 5:
-                piezaActual = new PiezaT();
+                piezaNueva = new PiezaT();
                 break;
             case 6:
-                piezaActual = new PiezaZ();
+                piezaNueva = new PiezaZ();
                 break;
         }
-        piezaActual.x = (anchoTablero - piezaActual.getAncho()) / 2;
-        piezaActual.y = 0;
+        piezaNueva.x = (anchoTablero - piezaNueva.getAncho()) / 2;
+        piezaNueva.y = 0;
+        jugador.setPiezaActual(piezaNueva);
+        if (jugador == jugadorActual) {
+            piezaActual = piezaNueva;
+        }
     }
 
-    // Método para dibujar un bloque con borde negro
+    private void generarNuevaPieza() {
+        generarNuevaPiezaParaJugador(jugadorActual);
+    }
+
+
     private void dibujarBloqueConBorde(Graphics2D g2d, int x, int y, Color color) {
         g2d.setColor(color);
         g2d.fillRect(x, y, tamanioBloque, tamanioBloque);
@@ -157,6 +183,17 @@ public class PanelJuego extends JPanel {
             }
         }
 
+        //Si el juego terminó
+        if (finDelJuego == true) {
+            g2d.setColor(Color.RED);
+            g2d.setFont(new Font("Arial", Font.BOLD, 18));
+            String mensaje = "¡Juego Terminado!";
+            FontMetrics fm = g2d.getFontMetrics();
+            int x = (anchoPanel - fm.stringWidth(mensaje)) / 2;
+            int y = altoPanel / 2;
+            g2d.drawString(mensaje, x, y);
+        }
+
         // Restaurar transformacion para que la cuadrícula no rote
         g2d.setTransform(original);
 
@@ -199,36 +236,48 @@ public class PanelJuego extends JPanel {
     }
 
     private void actualizarMovimiento() {
+        if (finDelJuego == true) {
+            repaint();
+            return;
+        }
+
+        PiezaPadre piezaActual = jugadorActual.getPiezaActual();
         if (piezaActual == null) return;
 
-        if (moverIzq && piezaActual.x > 0) {
+        boolean puedeMoverIzquierda = !hayColision(piezaActual.x - 1, piezaActual.y);
+        boolean puedeMoverDerecha = !hayColision(piezaActual.x + 1, piezaActual.y);
+        boolean puedeMoverAbajo = !hayColision(piezaActual.x, piezaActual.y + 1);
+
+        if (moverIzq && piezaActual.x > 0 && puedeMoverIzquierda) {
             piezaActual.moverIzq();
         }
 
-        if (moverDer && piezaActual.x + piezaActual.getAncho() < anchoTablero) {
+        if (moverDer && piezaActual.x + piezaActual.getAncho() < anchoTablero && puedeMoverDerecha) {
             piezaActual.moverDer();
         }
 
-        if (moverAbajo && piezaActual.y + piezaActual.getForma().length < altoTablero) {
-            if (!hayColision(piezaActual.x, piezaActual.y + 1)) {
-                piezaActual.moverAbajo();
-            } else {
-                fijarPieza();
-                generarNuevaPieza();
-            }
+        if (moverAbajo && piezaActual.y + piezaActual.getForma().length < altoTablero && puedeMoverAbajo) {
+            piezaActual.moverAbajo();
+        } else if (moverAbajo && !puedeMoverAbajo) {
+            fijarPieza();
+            generarNuevaPiezaParaJugador(jugadorActual);
         }
 
-        if (moverArriba && piezaActual.y > 0) {
+        if (moverArriba && piezaActual.y > 0 && !hayColision(piezaActual.x, piezaActual.y - 1)) {
             piezaActual.y--;
         }
 
         if (rotar) {
             piezaActual.rotar();
+            if(hayColision(piezaActual.x, piezaActual.y)){
+                piezaActual.rotar();
+            }
             rotar = false;
         }
 
         repaint();
     }
+
 
     /* ---------------- Metodo encargado de detectar las colisiones --------------------------- */
     private boolean hayColision(int colisionX, int colisionY) {
@@ -243,7 +292,7 @@ public class PanelJuego extends JPanel {
 
                     // Comprueba límites
                     if (xRelativo < 0 || xRelativo >= anchoTablero || yRelativo >= altoTablero) {
-                        return false;
+                        return true;
                     }
                     // Comprueba colisión con bloque
                     if (tablero[yRelativo][xRelativo] != null) {
@@ -257,6 +306,7 @@ public class PanelJuego extends JPanel {
 
     /* ------------------------ Metodo para fijar la pieza ----------------------- */
     private void fijarPieza() {
+        PiezaPadre piezaActual = jugadorActual.getPiezaActual();
         if (piezaActual == null) return;
         int[][] forma = piezaActual.getForma();
         int pesoPieza = piezaActual.getPeso();
@@ -275,7 +325,20 @@ public class PanelJuego extends JPanel {
                 }
             }
         }
+        jugadorActual.sumarPuntos(10);
         inclinarPlataforma();
+        jugadorActual.setPiezaActual(null);
+        cambiarTurno();
+        generarNuevaPiezaParaJugador(jugadorActual);
+    }
+
+    // Metodo cambio de turno
+    private void cambiarTurno(){
+        if(jugadorActual == jugador1){
+            jugadorActual = jugador2;
+        }else{
+            jugadorActual = jugador1;
+        }
     }
 
     private void inclinarPlataforma() {
@@ -283,11 +346,28 @@ public class PanelJuego extends JPanel {
         int pesoDer = 0;
         int centro = anchoTablero / 2;
 
-        for (int i = 0; i < centro; i++) pesoIzq += pesoColumnas[i];
-        for (int i = centro; i < anchoTablero; i++) pesoDer += pesoColumnas[i];
+    for (int i = 0; i< centro;i++) {
+        pesoIzq += pesoColumnas[i];
+    }
+    for (int i = centro; i< anchoTablero;i++) {
+        pesoDer += pesoColumnas[i];
+    }
 
-        int diferenciaPeso = pesoDer - pesoIzq;
+    int diferenciaPeso = pesoDer - pesoIzq;
 
-        anguloInclinacion = Math.max(-0.2, Math.min(0.2, diferenciaPeso * 0.01));
+    anguloInclinacion = diferenciaPeso * 0.01;
+
+    if (anguloInclinacion > 0.2) {
+        anguloInclinacion = 0.2;
+    }
+    if (anguloInclinacion < -0.2) {
+        anguloInclinacion = -0.2;
+    }
+
+    if (anguloInclinacion >= inclinacionPermitido){
+        finDelJuego = true;
+    } else if(anguloInclinacion <= -inclinacionPermitido) {
+        finDelJuego = true;
+        }
     }
 }
