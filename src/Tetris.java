@@ -6,7 +6,7 @@ public class Tetris extends JFrame {
         PanelJuego panel = new PanelJuego();
         add(panel);
 
-        setTitle("Tetr is Balance");
+        setTitle("Tetris Balance");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         pack();

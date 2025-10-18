@@ -8,7 +8,7 @@ import Bloques.*;
 
 public class PanelJuego extends JPanel {
     //Definición del panel de juego
-    private static final int anchoPanel = 300;
+    private static final int anchoPanel = 400;
     private static final int altoPanel = 600;
     private static final int tamanioBloque = 20;
     private static final int anchoTablero = anchoPanel / tamanioBloque;
@@ -73,17 +73,44 @@ public class PanelJuego extends JPanel {
         }
     }
 
-    // Genera una nueva pieza (por ahora solo Bloques.PiezaI)
+    // Genera una nueva pieza (por ahora solo PiezaI y PiezaJ)
     private void generarNuevaPieza() {
-        int indice = piezaAleatoria.nextInt(1);
+        int indice = piezaAleatoria.nextInt(7);
         switch (indice) {
             case 0:
                 piezaActual = new PiezaI();
+                break;
+            case 1:
+                piezaActual = new PiezaJ();
+                break;
+            case 2:
+                piezaActual = new PiezaL();
+                break;
+            case 3:
+                piezaActual = new PiezaO();
+                break;
+            case 4:
+                piezaActual = new PiezaS();
+                break;
+            case 5:
+                piezaActual = new PiezaT();
+                break;
+            case 6:
+                piezaActual = new PiezaZ();
                 break;
         }
         piezaActual.x = (anchoTablero - piezaActual.getAncho()) / 2;
         piezaActual.y = 0;
     }
+
+    // Método para dibujar un bloque con borde negro
+    private void dibujarBloqueConBorde(Graphics2D g2d, int x, int y, Color color) {
+        g2d.setColor(color);
+        g2d.fillRect(x, y, tamanioBloque, tamanioBloque);
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x, y, tamanioBloque, tamanioBloque);
+    }
+
 
     /*------------------ Dibuja la pieza y plataforma -----------------------*/
     @Override
@@ -101,20 +128,19 @@ public class PanelJuego extends JPanel {
         // Aplicar rotación para simular inclinación
         g2d.rotate(anguloInclinacion, pivotX, pivotY);
 
-        // Dibujo de la plataforma bloque por bloque
+        // Dibujo de la plataforma bloque por bloque con borde negro
         for (int fila = 0; fila < altoTablero; fila++) {
             for (int columna = 0; columna < anchoTablero; columna++) {
                 Color colorCelda = tablero[fila][columna];
                 if (colorCelda != null) {
-                    g2d.setColor(colorCelda);
                     int x = columna * tamanioBloque;
                     int y = fila * tamanioBloque;
-                    g2d.fillRect(x, y, tamanioBloque, tamanioBloque);
+                    dibujarBloqueConBorde(g2d, x, y, colorCelda);
                 }
             }
         }
 
-        // Dibujo de la pieza actual
+        // Dibujo de la pieza actual con borde negro
         if (piezaActual != null) {
             g2d.setColor(piezaActual.getColor());
             int[][] forma = piezaActual.getForma();
@@ -124,7 +150,8 @@ public class PanelJuego extends JPanel {
                     if (forma[fila][columna] == 1) {
                         int posicionX = (piezaActual.x + columna) * tamanioBloque;
                         int posicionY = (piezaActual.y + fila) * tamanioBloque;
-                        g2d.fillRect(posicionX, posicionY, tamanioBloque, tamanioBloque);
+
+                        dibujarBloqueConBorde(g2d, posicionX, posicionY, piezaActual.getColor());
                     }
                 }
             }
@@ -133,7 +160,8 @@ public class PanelJuego extends JPanel {
         // Restaurar transformacion para que la cuadrícula no rote
         g2d.setTransform(original);
 
-        // Dibujo de la cuadrícula del tablero (sin rotar)
+        // Opcional: dibujar cuadrícula sin rotar (comentado)
+        /*
         g2d.setColor(Color.lightGray);
         for (int fila = 0; fila < altoTablero; fila++) {
             for (int columna = 0; columna < anchoTablero; columna++) {
@@ -142,6 +170,7 @@ public class PanelJuego extends JPanel {
                 g2d.drawRect(x, y, tamanioBloque, tamanioBloque);
             }
         }
+        */
     }
 
     /*------------------ Movimientos por teclado -----------------------*/
@@ -259,7 +288,6 @@ public class PanelJuego extends JPanel {
 
         int diferenciaPeso = pesoDer - pesoIzq;
 
-        // Limitar ángulo entre -0.2 y 0.2 rad (aprox -11.5° a 11.5°)
         anguloInclinacion = Math.max(-0.2, Math.min(0.2, diferenciaPeso * 0.01));
     }
 }
