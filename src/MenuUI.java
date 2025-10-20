@@ -2,17 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuUI extends JFrame {
+
     public MenuUI() {
         setTitle("Tetris Menu");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(600, 600);
+        setSize(400, 600);
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // Load and scale image once (only one time, not every frame)
-        ImageIcon bgIcon = new ImageIcon("pibbles.jpg");
+        // Imagen de fondo
+        ImageIcon bgIcon = new ImageIcon("TetrisBalance_GrupoPatitoFeo_POO\\src\\..."); //falta imagen
         Image background = bgIcon.getImage().getScaledInstance(400, 600, Image.SCALE_SMOOTH);
 
+        /*
         // Custom panel that paints the background image
         JPanel backgroundPanel = new JPanel() {
             @Override
@@ -23,6 +25,8 @@ public class MenuUI extends JFrame {
         };
         backgroundPanel.setLayout(new GridBagLayout()); // center the menu nicely
 
+        */
+
         // Menu panel with GridLayout
         JPanel menuPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         menuPanel.setOpaque(false); // transparent so background is visible
@@ -32,9 +36,9 @@ public class MenuUI extends JFrame {
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.RED);
 
-        JButton startBtn = makeButton("Start");
-        JButton helpBtn = makeButton("Help");
-        JButton exitBtn = makeButton("Exit");
+        JButton startBtn = makeButton("Iniciar juego");
+        JButton helpBtn = makeButton("Controles");
+        JButton exitBtn = makeButton("Salir");
 
         menuPanel.add(title);
         menuPanel.add(startBtn);
@@ -46,12 +50,24 @@ public class MenuUI extends JFrame {
         setContentPane(backgroundPanel);
 
         // Button actions
-        startBtn.addActionListener(e -> System.out.println("Start game"));
-        helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Controls(player 1): \n (A , D) Move\n (W) Move\n (S) Drop\n" + "----------------------------\n"+ "Controls(player 2):\n← → Move\n↑ Rotate\n↓ Drop\n "));
+        startBtn.addActionListener(e -> {
+            // Cerrar el menú
+            dispose();
+            // Iniciar el juego
+            SwingUtilities.invokeLater(() -> {
+                new Tetris();
+                new VentanaPrincipal();
+            });
+        });
+        
+        helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, 
+            "Controles:\n← → ↑ ↓ Mover\n (Espacio) Rotar Bloque "));
+        
         exitBtn.addActionListener(e -> System.exit(0));
 
         setVisible(true);
     }
+    
     private JButton makeButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Arial", Font.BOLD, 20));
@@ -76,8 +92,6 @@ public class MenuUI extends JFrame {
 
         return btn;
     }
-
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(MenuUI::new);

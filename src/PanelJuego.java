@@ -199,6 +199,7 @@ public class PanelJuego extends JPanel {
 
         // Opcional: dibujar cuadrícula sin rotar (comentado)
 
+        /*
         g2d.setColor(Color.lightGray);
         for (int fila = 0; fila < altoTablero; fila++) {
             for (int columna = 0; columna < anchoTablero; columna++) {
@@ -207,7 +208,7 @@ public class PanelJuego extends JPanel {
                 g2d.drawRect(x, y, tamanioBloque, tamanioBloque);
             }
         }
-
+        */
     }
 
     /*------------------ Movimientos por teclado -----------------------*/

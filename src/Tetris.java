@@ -14,11 +14,12 @@ public class Tetris extends JFrame {
         setVisible(true);
     }
     public static void main(String[] args) {
-        new Tetris();
+        //new Tetris();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new VentanaPrincipal();
+                new MenuUI();
+                //new VentanaPrincipal();
             }
         });
     }
