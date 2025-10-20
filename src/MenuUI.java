@@ -14,8 +14,7 @@ public class MenuUI extends JFrame {
         ImageIcon bgIcon = new ImageIcon("TetrisBalance_GrupoPatitoFeo_POO\\src\\..."); //falta imagen
         Image background = bgIcon.getImage().getScaledInstance(400, 600, Image.SCALE_SMOOTH);
 
-        /*
-        // Custom panel that paints the background image
+        // Panel
         JPanel backgroundPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -23,13 +22,11 @@ public class MenuUI extends JFrame {
                 g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
             }
         };
-        backgroundPanel.setLayout(new GridBagLayout()); // center the menu nicely
+        backgroundPanel.setLayout(new GridBagLayout()); // Centra el menu
 
-        */
-
-        // Menu panel with GridLayout
+        // Panel de menu
         JPanel menuPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        menuPanel.setOpaque(false); // transparent so background is visible
+        menuPanel.setOpaque(false);
         menuPanel.setPreferredSize(new Dimension(250, 300));
 
         JLabel title = new JLabel("TETRIS", SwingConstants.CENTER);
@@ -45,11 +42,11 @@ public class MenuUI extends JFrame {
         menuPanel.add(helpBtn);
         menuPanel.add(exitBtn);
 
-        // Add menu to center of background
+        // Agrega el menu al centro del fondo
         backgroundPanel.add(menuPanel);
         setContentPane(backgroundPanel);
 
-        // Button actions
+        // Botones
         startBtn.addActionListener(e -> {
             // Cerrar el menú
             dispose();
@@ -77,16 +74,16 @@ public class MenuUI extends JFrame {
         btn.setOpaque(true);
         btn.setBorder(BorderFactory.createLineBorder(Color.WHITE));
 
-        // Add hover effect manually
+        // Efecto de botones
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                btn.setBackground(new Color(60, 60, 60)); // lighter gray when hovered
+                btn.setBackground(new Color(60, 60, 60));
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                btn.setBackground(new Color(30, 30, 30)); // back to normal
+                btn.setBackground(new Color(30, 30, 30)); 
             }
         });
 
