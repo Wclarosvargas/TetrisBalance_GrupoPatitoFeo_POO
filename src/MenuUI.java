@@ -11,7 +11,7 @@ public class MenuUI extends JFrame {
         setResizable(false);
 
         // Imagen de fondo
-        ImageIcon bgIcon = new ImageIcon("TetrisBalance_GrupoPatitoFeo_POO\\src\\..."); //falta imagen
+        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/resources/menu_bg.jpg"));
         Image background = bgIcon.getImage().getScaledInstance(400, 600, Image.SCALE_SMOOTH);
 
         // Panel
@@ -29,7 +29,7 @@ public class MenuUI extends JFrame {
         menuPanel.setOpaque(false);
         menuPanel.setPreferredSize(new Dimension(250, 300));
 
-        JLabel title = new JLabel("TETRIS", SwingConstants.CENTER);
+        JLabel title = new JLabel("", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 36));
         title.setForeground(Color.RED);
 
@@ -52,7 +52,7 @@ public class MenuUI extends JFrame {
             dispose();
             // Iniciar el juego
             SwingUtilities.invokeLater(() -> {
-                new Tetris();
+                //new Tetris();
                 new VentanaPrincipal();
             });
         });
