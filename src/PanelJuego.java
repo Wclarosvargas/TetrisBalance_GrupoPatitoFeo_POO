@@ -260,7 +260,6 @@ public class PanelJuego extends JPanel {
             }
             gameTimer.restart();
 
-            new Tetris();
             new VentanaPrincipal();
         });
         
