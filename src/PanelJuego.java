@@ -126,11 +126,11 @@ public class PanelJuego extends JPanel {
         if (jugador == jugadorActual) {
             piezaActual = piezaNueva;
         }
+        if (hayColision(piezaNueva.x, piezaNueva.y)) {
+            finDelJuego = true;
+        }
     }
 
-    private void generarNuevaPieza() {
-        generarNuevaPiezaParaJugador(jugadorActual);
-    }
 
 
     private void dibujarBloqueConBorde(Graphics2D g2d, int x, int y, Color color) {
@@ -198,6 +198,22 @@ public class PanelJuego extends JPanel {
             SwingUtilities.invokeLater(() -> {
                 mostrarDialogoGameOver();
             });
+        }
+    }
+
+    // ------ Metodo para dibujar una pieza
+    private void dibujarPieza(Graphics2D g2d, PiezaPadre pieza){
+        g2d.setColor(pieza.getColor());
+        int[][] forma = pieza.getForma();
+
+        for (int fila = 0; fila < forma.length; fila++) {
+            for (int columna = 0; columna < forma[fila].length; columna++) {
+                if (forma[fila][columna] == 1) {
+                    int posicionX = (pieza.x + columna) * tamanioBloque;
+                    int posicionY = (pieza.y + fila) * tamanioBloque;
+                    dibujarBloqueConBorde(g2d, posicionX, posicionY, pieza.getColor());
+                }
+            }
         }
     }
 
@@ -361,12 +377,18 @@ public class PanelJuego extends JPanel {
             piezaActual.moverDer();
         }
 
-        if (moverAbajo && piezaActual.y + piezaActual.getForma().length < altoTablero && puedeMoverAbajo) {
-            piezaActual.moverAbajo();
-        } else if (moverAbajo && !puedeMoverAbajo) {
-            fijarPieza();
-            generarNuevaPiezaParaJugador(jugadorActual);
+        if (moverAbajo){
+            if(puedeMoverAbajo){
+                piezaActual.moverAbajo();
+            }else {
+                if(piezaTocaSuelo(piezaActual)){
+                    finDelJuego = true;
+                } else {
+                    fijarPieza();
+                }
+            }
         }
+
 
         if (moverArriba && piezaActual.y > 0 && !hayColision(piezaActual.x, piezaActual.y - 1)) {
             piezaActual.y--;
@@ -382,6 +404,23 @@ public class PanelJuego extends JPanel {
 
         repaint();
     }
+
+    /*---- Metodo para detectar si la pieza colisiono con el suelo --*/
+    private boolean piezaTocaSuelo(PiezaPadre pieza){
+        int[][] forma = pieza.getForma();
+        for (int fila = 0; fila < forma.length; fila++) {
+            for (int columna = 0; columna < forma[fila].length; columna++) {
+                if (forma[fila][columna] == 1) {
+                    int yRelativo = pieza.y + fila;
+                    if (yRelativo == altoTablero -1){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
 
     /* ---------------- Metodo encargado de detectar las colisiones --------------------------- */
