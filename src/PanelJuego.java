@@ -1,8 +1,8 @@
-import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.Random;
-import javax.swing.Timer;
+
+import javax.swing.*;
 
 import Bloques.*;
 
@@ -31,11 +31,14 @@ public class PanelJuego extends JPanel {
 
     private static final double inclinacionPermitido = 0.20;
     private boolean finDelJuego = false;
+    private boolean dialogoMostrado = false; // Para evitar mostrar el diálogo múltiples veces
 
     //jugadores
     private Jugador jugador1;
     private Jugador jugador2;
     private Jugador jugadorActual;
+
+    private Timer gameTimer; // Referencia al timer del juego
 
 
     /* ------------------ Constructor ---------------------------*/
@@ -62,7 +65,8 @@ public class PanelJuego extends JPanel {
         controlesTeclado();
         generarNuevaPiezaParaJugador(jugadorActual);
 
-        new Timer(50, e -> actualizarMovimiento()).start();
+        gameTimer = new Timer(50, e -> actualizarMovimiento());
+        gameTimer.start();
     }
 
 
@@ -183,32 +187,134 @@ public class PanelJuego extends JPanel {
             }
         }
 
-        //Si el juego terminó
-        if (finDelJuego == true) {
-            g2d.setColor(Color.RED);
-            g2d.setFont(new Font("Arial", Font.BOLD, 18));
-            String mensaje = "¡Juego Terminado!";
-            FontMetrics fm = g2d.getFontMetrics();
-            int x = (anchoPanel - fm.stringWidth(mensaje)) / 2;
-            int y = altoPanel / 2;
-            g2d.drawString(mensaje, x, y);
-        }
-
         // Restaurar transformacion para que la cuadrícula no rote
         g2d.setTransform(original);
 
-        // Opcional: dibujar cuadrícula sin rotar (comentado)
-
-        /*
-        g2d.setColor(Color.lightGray);
-        for (int fila = 0; fila < altoTablero; fila++) {
-            for (int columna = 0; columna < anchoTablero; columna++) {
-                int x = columna * tamanioBloque;
-                int y = fila * tamanioBloque;
-                g2d.drawRect(x, y, tamanioBloque, tamanioBloque);
-            }
+        //Si el juego terminó, mostrar ventana emergente
+        if (finDelJuego && !dialogoMostrado) {
+            dialogoMostrado = true;
+            gameTimer.stop(); // Detener el timer del juego
+            
+            // Mostrar diálogo en el hilo de eventos
+            SwingUtilities.invokeLater(() -> {
+                mostrarDialogoGameOver();
+            });
         }
-        */
+    }
+
+    /*------------------ Ventana emergente de Fin de juego -----------------------*/
+    private void mostrarDialogoGameOver() {
+        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+        
+        // Crear diálogo personalizado
+        JDialog dialog = new JDialog(parent, "Fin del juego", true);
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(parent);
+        dialog.setResizable(false);
+        dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+        
+        // Panel principal
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout(10, 10));
+        mainPanel.setBackground(new Color(40, 40, 40));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        // Panel superior con título y puntuaciones
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        topPanel.setBackground(new Color(40, 40, 40));
+        
+        JLabel titleLabel = new JLabel("Fin del juego");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 36));
+        titleLabel.setForeground(Color.RED);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
+        JLabel ganador = new JLabel();
+
+        if (jugadorActual==jugador2){
+            ganador.setText("¡El jugador 2 ganó!");
+        } else if (jugadorActual==jugador1){
+            ganador.setText("¡El jugador 1 ganó!");
+        }
+
+        ganador.setFont(new Font("Arial", Font.BOLD, 20));
+        ganador.setForeground(Color.WHITE);
+        ganador.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        topPanel.add(Box.createVerticalStrut(20));
+        topPanel.add(titleLabel);
+        topPanel.add(ganador);
+        topPanel.add(Box.createVerticalStrut(30));
+        
+        // Panel de botones
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        buttonPanel.setBackground(new Color(40, 40, 40));
+        
+        // Botón Reintentar
+        JButton btnReintentar = createStyledButton("Reintentar", new Color(46, 204, 113));
+        btnReintentar.addActionListener(e -> {
+            for (Window window : Window.getWindows()) {
+                if (window.isShowing()) {
+                window.dispose();
+                }
+            }
+            gameTimer.restart();
+
+            new Tetris();
+            new VentanaPrincipal();
+        });
+        
+        // Botón Salir
+        JButton btnSalir = createStyledButton("Salir", new Color(231, 76, 60));
+        btnSalir.addActionListener(e -> {
+            for (Window window : Window.getWindows()) {
+                if (window.isShowing()) {
+                window.dispose();
+                }
+            }
+            gameTimer.restart();
+
+            new MenuUI();
+        });
+        
+        buttonPanel.add(btnReintentar);
+        buttonPanel.add(btnSalir);
+        
+        // Ensamblar todo
+        mainPanel.add(topPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        dialog.setContentPane(mainPanel);
+        dialog.setVisible(true);
+    }
+    
+    // Método para crear botones estilizados
+    private JButton createStyledButton(String text, Color bgColor) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Arial", Font.BOLD, 18));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(bgColor);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setPreferredSize(new Dimension(140, 45));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Efecto hover
+        Color originalColor = bgColor;
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                btn.setBackground(originalColor.brighter());
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                btn.setBackground(originalColor);
+            }
+        });
+        
+        return btn;
     }
 
     /*------------------ Movimientos por teclado -----------------------*/
@@ -237,8 +343,7 @@ public class PanelJuego extends JPanel {
     }
 
     private void actualizarMovimiento() {
-        if (finDelJuego == true) {
-            repaint();
+        if (finDelJuego) {
             return;
         }
 
@@ -355,28 +460,28 @@ public class PanelJuego extends JPanel {
         int pesoDer = 0;
         int centro = anchoTablero / 2;
 
-    for (int i = 0; i< centro;i++) {
-        pesoIzq += pesoColumnas[i];
-    }
-    for (int i = centro; i< anchoTablero;i++) {
-        pesoDer += pesoColumnas[i];
-    }
+        for (int i = 0; i< centro;i++) {
+            pesoIzq += pesoColumnas[i];
+        }
+        for (int i = centro; i< anchoTablero;i++) {
+            pesoDer += pesoColumnas[i];
+        }
 
-    int diferenciaPeso = pesoDer - pesoIzq;
+        int diferenciaPeso = pesoDer - pesoIzq;
 
-    anguloInclinacion = diferenciaPeso * 0.01;
+        anguloInclinacion = diferenciaPeso * 0.01;
 
-    if (anguloInclinacion > 0.2) {
-        anguloInclinacion = 0.2;
-    }
-    if (anguloInclinacion < -0.2) {
-        anguloInclinacion = -0.2;
-    }
+        if (anguloInclinacion > 0.2) {
+            anguloInclinacion = 0.2;
+        }
+        if (anguloInclinacion < -0.2) {
+            anguloInclinacion = -0.2;
+        }
 
-    if (anguloInclinacion >= inclinacionPermitido){
-        finDelJuego = true;
-    } else if(anguloInclinacion <= -inclinacionPermitido) {
-        finDelJuego = true;
+        if (anguloInclinacion >= inclinacionPermitido){
+            finDelJuego = true;
+        } else if(anguloInclinacion <= -inclinacionPermitido) {
+            finDelJuego = true;
         }
     }
 }
