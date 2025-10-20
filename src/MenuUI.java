@@ -11,7 +11,7 @@ public class MenuUI extends JFrame {
         setResizable(false);
 
         // Imagen de fondo
-        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/resources/menu_bg.jpg"));
+        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/resources/menu_bg.jpeg"));
         Image background = bgIcon.getImage().getScaledInstance(400, 600, Image.SCALE_SMOOTH);
 
         // Panel
