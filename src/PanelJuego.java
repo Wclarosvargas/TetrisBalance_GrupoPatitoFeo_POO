@@ -32,10 +32,7 @@ public class PanelJuego extends JPanel {
     private boolean finDelJuego = false;
     private boolean dialogoMostrado = false; // Para evitar mostrar el diálogo múltiples veces
 
-    //jugadores
-    private Jugador jugador1;
-    private Jugador jugador2;
-    private Jugador jugadorActual;
+    private ManejoTurnos manejoTurnos;
 
     private Timer gameTimer; // Referencia al timer del juego
 
@@ -52,17 +49,17 @@ public class PanelJuego extends JPanel {
             pesoColumnas[i] = 0;
         }
 
-        jugador1 = new Jugador("Jugador 1");
-        jugador2 = new Jugador("Jugador 2");
+        Jugador j1 = new Jugador("Jugador 1");
+        Jugador j2 = new Jugador("Jugador 2");
+        manejoTurnos = new ManejoTurnos(j1, j2);
 
-        jugadorActual = jugador1;
         piezaActual = null;
-        generarNuevaPiezaParaJugador(jugadorActual);
+        generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
 
         setFocusable(true);
         requestFocusInWindow(); // necesario para recibir eventos en teclado
         controlesTeclado();
-        generarNuevaPiezaParaJugador(jugadorActual);
+        generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
 
         gameTimer = new Timer(50, e -> actualizarMovimiento());
         gameTimer.start();
@@ -123,7 +120,7 @@ public class PanelJuego extends JPanel {
         piezaNueva.x = (anchoTablero - piezaNueva.getAncho()) / 2;
         piezaNueva.y = 0;
         jugador.setPiezaActual(piezaNueva);
-        if (jugador == jugadorActual) {
+        if (jugador == manejoTurnos.getJugadorActual()) {
             piezaActual = piezaNueva;
         }
         if (hayColision(piezaNueva.x, piezaNueva.y)) {
@@ -246,9 +243,9 @@ public class PanelJuego extends JPanel {
         
         JLabel ganador = new JLabel();
 
-        if (jugadorActual==jugador2){
+        if (manejoTurnos.getJugadorActual() == manejoTurnos.getJugador1()){
             ganador.setText("¡El jugador 2 ganó!");
-        } else if (jugadorActual==jugador1){
+        } else{
             ganador.setText("¡El jugador 1 ganó!");
         }
 
@@ -303,7 +300,7 @@ public class PanelJuego extends JPanel {
         dialog.setVisible(true);
     }
     
-    // Método para crear botones estilizados
+    // Metodo para crear botones estilizados
     private JButton createStyledButton(String text, Color bgColor) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Arial", Font.BOLD, 18));
@@ -361,7 +358,7 @@ public class PanelJuego extends JPanel {
             return;
         }
 
-        PiezaPadre piezaActual = jugadorActual.getPiezaActual();
+        PiezaPadre piezaActual = manejoTurnos.getJugadorActual().getPiezaActual();
         if (piezaActual == null) return;
 
         boolean puedeMoverIzquierda = !hayColision(piezaActual.x - 1, piezaActual.y);
@@ -449,7 +446,7 @@ public class PanelJuego extends JPanel {
 
     /* ------------------------ Metodo para fijar la pieza ----------------------- */
     private void fijarPieza() {
-        PiezaPadre piezaActual = jugadorActual.getPiezaActual();
+        PiezaPadre piezaActual = manejoTurnos.getJugadorActual().getPiezaActual();
         if (piezaActual == null) return;
         int[][] forma = piezaActual.getForma();
         int pesoPieza = piezaActual.getPeso();
@@ -468,30 +465,25 @@ public class PanelJuego extends JPanel {
                 }
             }
         }
-        jugadorActual.sumarPuntos(10);
+        manejoTurnos.getJugadorActual().sumarPuntos(10);
         inclinarPlataforma();
-        jugadorActual.setPiezaActual(null);
-        cambiarTurno();
-        generarNuevaPiezaParaJugador(jugadorActual);
+        manejoTurnos.getJugadorActual().setPiezaActual(null);
+        manejoTurnos.cambiarTurno();
+        generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
     }
 
     public Jugador getJugador1() {
-        return jugador1;
+        return manejoTurnos.getJugador1();
     }
 
     public Jugador getJugador2() {
-        return jugador2;
+        return manejoTurnos.getJugador2();
     }
 
-    // Metodo cambio de turno
-    private void cambiarTurno(){
-        if(jugadorActual == jugador1){
-            jugadorActual = jugador2;
-        }else{
-            jugadorActual = jugador1;
-        }
-    }
 
+    public ManejoTurnos getManejoTurnos() {
+        return manejoTurnos;
+    }
     private void inclinarPlataforma() {
         int pesoIzq = 0;
         int pesoDer = 0;
@@ -521,4 +513,6 @@ public class PanelJuego extends JPanel {
             finDelJuego = true;
         }
     }
+
+
 }

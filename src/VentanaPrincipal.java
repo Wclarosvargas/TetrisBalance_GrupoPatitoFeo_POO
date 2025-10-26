@@ -8,6 +8,10 @@ public class VentanaPrincipal extends JFrame {
     private JLabel scoreJugador2;
     private JPanel panelSiguientePiezaJ1;
     private JPanel panelSiguientePiezaJ2;
+    private JLabel nombreJugador1;
+    private JLabel nombreJugador2;
+    private final Color colorActivo = Color.YELLOW;
+    private final Color colorInactivo = Color.BLACK;
 
     public VentanaPrincipal() {
         setTitle("Tetris Balance");
@@ -17,10 +21,10 @@ public class VentanaPrincipal extends JFrame {
         panelJuego = new PanelJuego();
         add(panelJuego, BorderLayout.CENTER);
 
-        JPanel panelIzquierda = crearPanelJugador("Player 1");
+        JPanel panelIzquierda = crearPanelJugador("PLAYER 1");
         add(panelIzquierda, BorderLayout.WEST);
 
-        JPanel panelDerecha = crearPanelJugador("Player 2");
+        JPanel panelDerecha = crearPanelJugador("PLAYER 2");
         add(panelDerecha, BorderLayout.EAST);
 
         pack();
@@ -52,8 +56,10 @@ public class VentanaPrincipal extends JFrame {
 
         if (nombreJugador.equalsIgnoreCase("Player 1")) {
             scoreJugador1 = etiquetaPuntaje;
+            nombreJugador1 = etiquetaNombre;
         } else {
             scoreJugador2 = etiquetaPuntaje;
+            nombreJugador2 = etiquetaNombre;
         }
 
         JPanel panelSiguientePieza = new JPanel();
@@ -78,10 +84,19 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private void actualizarUI() {
-        if (panelJuego != null) {
+        if (panelJuego != null && panelJuego.getManejoTurnos() != null) {
             scoreJugador1.setText(String.valueOf(panelJuego.getJugador1().getPuntaje()));
             scoreJugador2.setText(String.valueOf(panelJuego.getJugador2().getPuntaje()));
-            // Aquí podrías actualizar también las piezas siguientes
+
+            Jugador jugadorActual = panelJuego.getManejoTurnos().getJugadorActual();
+            if(jugadorActual == panelJuego.getJugador1()){
+                nombreJugador1.setForeground(colorActivo);
+                nombreJugador2.setForeground(colorInactivo);
+            } else{
+                nombreJugador1.setForeground(colorInactivo);
+                nombreJugador2.setForeground(colorActivo);
+            }
+
         }
     }
 }
