@@ -4,6 +4,8 @@ import java.util.Random;
 import javax.swing.*;
 
 import Bloques.*;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 public class PanelJuego extends JPanel {
     //Definición del panel de juego
@@ -12,6 +14,8 @@ public class PanelJuego extends JPanel {
     private static final int tamanioBloque = 20;
     private static final int anchoTablero = anchoPanel / tamanioBloque;
     private static final int altoTablero = altoPanel / tamanioBloque;
+    private Image fondo;
+
 
     private Color[][] tablero; // guarda estado de celdas (null = vacio)
 
@@ -40,8 +44,14 @@ public class PanelJuego extends JPanel {
     /* ------------------ Constructor ---------------------------*/
     public PanelJuego() {
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
-        setBackground(Color.BLACK);
-
+    
+        try {
+            fondo = ImageIO.read(new File("C:\\Users\\bruno\\TetrisBalance_GrupoPatitoFeo_POO\\src\\resources\\pintura-mar-nubes-oceano-fondo_384401-4657.png"));
+            System.out.println("Fondo cargado con ImageIO: " + fondo);
+        } catch (Exception e) {
+            System.out.println("No se pudo cargar la imagen de fondo con ImageIO.");
+            e.printStackTrace();
+        }
         tablero = new Color[altoTablero][anchoTablero];
         inicializarPlataforma();
 
@@ -84,7 +94,7 @@ public class PanelJuego extends JPanel {
         for (int fila = 0; fila < altoPlataformaEnBloques; fila++) {
             for (int columna = 0; columna < anchoPlataformaEnBloques; columna++) {
                 if (formaPlataforma[fila][columna] == 1) {
-                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(141, 50, 50);
+                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(150, 75, 0);
                 }
             }
         }
@@ -151,7 +161,8 @@ public class PanelJuego extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
+        g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
+        Graphics2D  g2d = (Graphics2D) g;
 
         // Guardamos la transformación original para restaurar luego
         AffineTransform original = g2d.getTransform();
