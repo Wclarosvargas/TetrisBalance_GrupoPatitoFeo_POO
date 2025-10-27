@@ -63,6 +63,9 @@ public class PanelJuego extends JPanel {
 
         gameTimer = new Timer(50, e -> actualizarMovimiento());
         gameTimer.start();
+
+   
+
     }
 
 
@@ -207,21 +210,7 @@ public class PanelJuego extends JPanel {
         }
     }
 
-    // ------ Metodo para dibujar una pieza
-    private void dibujarPieza(Graphics2D g2d, PiezaPadre pieza){
-        g2d.setColor(pieza.getColor());
-        int[][] forma = pieza.getForma();
-
-        for (int fila = 0; fila < forma.length; fila++) {
-            for (int columna = 0; columna < forma[fila].length; columna++) {
-                if (forma[fila][columna] == 1) {
-                    int posicionX = (pieza.x + columna) * tamanioBloque;
-                    int posicionY = (pieza.y + fila) * tamanioBloque;
-                    dibujarBloqueConBorde(g2d, posicionX, posicionY, pieza.getColor());
-                }
-            }
-        }
-    }
+    
 
     /*------------------ Ventana emergente de Fin de juego -----------------------*/
     private void mostrarDialogoGameOver() {
@@ -523,6 +512,9 @@ public class PanelJuego extends JPanel {
             finDelJuego = true;
         }
     }
+    
 
 
+
+    
 }
