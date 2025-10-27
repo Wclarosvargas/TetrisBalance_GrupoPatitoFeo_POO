@@ -38,7 +38,7 @@ public class MenuUI extends Menu {
         });
 
         helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Controles:\n← → ↑ ↓ Mover\nEspacio: Rotar bloque"));
+                "Controles:\nJugador 1:\n A S D Mover\nW Rotar bloque\nJugador 2:\n← → ↓ Mover\n↑ Rotar bloque"));
 
         exitBtn.addActionListener(e -> System.exit(0));
     }

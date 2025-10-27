@@ -351,7 +351,9 @@ public class PanelJuego extends JPanel {
                         moverAbajo = true;
                         // Acelerar la caída cuando se presiona abajo
                         gravityTimer.setDelay(VELOCIDAD_RAPIDA);
+                        
                     }
+                    if (key == java.awt.event.KeyEvent.VK_W) rotar = true;
                 } else {
                     if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = true;
                     if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = true;
@@ -361,8 +363,10 @@ public class PanelJuego extends JPanel {
                         // Acelerar la caída cuando se presiona abajo
                         gravityTimer.setDelay(VELOCIDAD_RAPIDA);
                     }
+                    if (key == java.awt.event.KeyEvent.VK_UP) rotar = true;
+
                 }
-                if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = true;
+                //if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = true;
             }
 
 
@@ -371,9 +375,11 @@ public class PanelJuego extends JPanel {
                 int key = e.getKeyCode();
                 
                 // Para jugador 1
-                if (key == java.awt.event.KeyEvent.VK_A || key == java.awt.event.KeyEvent.VK_D) {
+                if (key == java.awt.event.KeyEvent.VK_A || key == java.awt.event.KeyEvent.VK_D || key == java.awt.event.KeyEvent.VK_W) {
                     if (key == java.awt.event.KeyEvent.VK_A) moverIzq = false;
                     if (key == java.awt.event.KeyEvent.VK_D) moverDer = false;
+                    if (key == java.awt.event.KeyEvent.VK_W) rotar = false;
+
                 }
                 
                 if (key == java.awt.event.KeyEvent.VK_S) {
@@ -382,9 +388,11 @@ public class PanelJuego extends JPanel {
                 }
                 
                 // Para jugador 2
-                if (key == java.awt.event.KeyEvent.VK_LEFT || key == java.awt.event.KeyEvent.VK_RIGHT) {
+                if (key == java.awt.event.KeyEvent.VK_LEFT || key == java.awt.event.KeyEvent.VK_RIGHT || key == java.awt.event.KeyEvent.VK_UP) {
                     if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = false;
                     if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = false;
+                    if (key == java.awt.event.KeyEvent.VK_UP) rotar = false;
+
                 }
                 
                 if (key == java.awt.event.KeyEvent.VK_DOWN) {
@@ -392,7 +400,7 @@ public class PanelJuego extends JPanel {
                     gravityTimer.setDelay(VELOCIDAD_GRAVEDAD);
                 }
                 
-                if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = false;
+                //if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = false;
             }
         });
     }
@@ -546,8 +554,8 @@ public class PanelJuego extends JPanel {
         inclinarPlataforma();
         manejoTurnos.getJugadorActual().setPiezaActual(null);
         if (finDelJuego==false)
-            resetearTeclas();
             manejoTurnos.cambiarTurno();
+            resetearTeclas();
         generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
     }
 
