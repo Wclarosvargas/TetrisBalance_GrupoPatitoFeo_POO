@@ -92,31 +92,47 @@ public class PanelJuego extends JPanel {
 
     // Genera una nueva pieza (por ahora solo PiezaI y PiezaJ)
     private void generarNuevaPiezaParaJugador(Jugador jugador) {
-        int indice = piezaAleatoria.nextInt(7);
-        PiezaPadre piezaNueva = null;
-        if (indice == 0) {
-            piezaNueva = new PiezaI();
-        } else if (indice == 1) {
-            piezaNueva = new PiezaJ();
-        } else if (indice == 2) {
-            piezaNueva = new PiezaL();
-        } else if (indice == 3) {
-            piezaNueva = new PiezaO();
-        } else if (indice == 4) {
-            piezaNueva = new PiezaS();
-        } else if (indice == 5) {
-            piezaNueva = new PiezaT();
-        } else if (indice == 6) {
-            piezaNueva = new PiezaZ();
-        }
+        try {
+            int indice = piezaAleatoria.nextInt(7);;
+            PiezaPadre piezaNueva = null;
+            if (indice == 0) {
+                piezaNueva = new PiezaI();
+            } else if (indice == 1) {
+                piezaNueva = new PiezaJ();
+            } else if (indice == 2) {
+                piezaNueva = new PiezaL();
+            } else if (indice == 3) {
+                piezaNueva = new PiezaO();
+            } else if (indice == 4) {
+                piezaNueva = new PiezaS();
+            } else if (indice == 5) {
+                piezaNueva = new PiezaT();
+            } else if (indice == 6) {
+                piezaNueva = new PiezaZ();
+            }
 
-        piezaNueva.x = (anchoTablero - piezaNueva.getAncho()) / 2;
-        piezaNueva.y = 0;
-        jugador.setPiezaActual(piezaNueva);
-        if (jugador == manejoTurnos.getJugadorActual()) {
-            piezaActual = piezaNueva;
-        }
-        if (hayColision(piezaNueva.x, piezaNueva.y)) {
+            if (piezaNueva == null){
+                throw new IllegalStateException("No se pudo crear una nueva pieza");
+            }
+
+            piezaNueva.x = (anchoTablero - piezaNueva.getAncho()) / 2;
+            piezaNueva.y = 0;
+
+            jugador.setPiezaActual(piezaNueva);
+            if (jugador == manejoTurnos.getJugadorActual()) {
+                piezaActual = piezaNueva;
+            }
+            if (hayColision(piezaNueva.x, piezaNueva.y)) {
+                finDelJuego = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al crear una nueva pieza:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
             finDelJuego = true;
         }
     }
