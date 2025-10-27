@@ -477,7 +477,8 @@ public class PanelJuego extends JPanel {
         manejoTurnos.getJugadorActual().sumarPuntos(10);
         inclinarPlataforma();
         manejoTurnos.getJugadorActual().setPiezaActual(null);
-        manejoTurnos.cambiarTurno();
+        if (finDelJuego==false)
+            manejoTurnos.cambiarTurno();
         generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
     }
 
