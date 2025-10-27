@@ -40,12 +40,19 @@ public class PanelJuego extends JPanel {
     // Configuración de velocidad de caída
     private static final int VELOCIDAD_GRAVEDAD = 500; // milisegundos entre caídas (ajustable)
     private static final int VELOCIDAD_RAPIDA = 50; // velocidad cuando se presiona abajo
-
+    private Image imagenFondo;
 
     /* ------------------ Constructor ---------------------------*/
     public PanelJuego() {
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
-        setBackground(Color.BLACK);
+        try{
+            imagenFondo = new ImageIcon(getClass().getResource("/resources/fondoMarino.jpg")).getImage();
+        }catch(Exception errorImagen){
+            errorImagen.printStackTrace();
+            System.err.println("Error al cargar la imagen de fondo. Se usara el color negro");
+            imagenFondo = null;
+            setBackground(Color.BLACK);
+        }
 
         tablero = new Color[altoTablero][anchoTablero];
         inicializarPlataforma();
@@ -94,7 +101,7 @@ public class PanelJuego extends JPanel {
         for (int fila = 0; fila < altoPlataformaEnBloques; fila++) {
             for (int columna = 0; columna < anchoPlataformaEnBloques; columna++) {
                 if (formaPlataforma[fila][columna] == 1) {
-                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(141, 50, 50);
+                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(99, 68, 61);
                 }
             }
         }
@@ -163,6 +170,12 @@ public class PanelJuego extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        if(imagenFondo != null){
+            g2d.drawImage(imagenFondo, 0,0, getWidth(),getHeight(), this);
+        }else{
+            g2d.setColor(Color.BLACK);
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
         // Guardamos la transformación original para restaurar luego
         AffineTransform original = g2d.getTransform();
 
