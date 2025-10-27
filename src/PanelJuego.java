@@ -94,29 +94,22 @@ public class PanelJuego extends JPanel {
     private void generarNuevaPiezaParaJugador(Jugador jugador) {
         int indice = piezaAleatoria.nextInt(7);
         PiezaPadre piezaNueva = null;
-        switch (indice) {
-            case 0:
-                piezaNueva = new PiezaI();
-                break;
-            case 1:
-                piezaNueva = new PiezaJ();
-                break;
-            case 2:
-                piezaNueva = new PiezaL();
-                break;
-            case 3:
-                piezaNueva = new PiezaO();
-                break;
-            case 4:
-                piezaNueva = new PiezaS();
-                break;
-            case 5:
-                piezaNueva = new PiezaT();
-                break;
-            case 6:
-                piezaNueva = new PiezaZ();
-                break;
+        if (indice == 0) {
+            piezaNueva = new PiezaI();
+        } else if (indice == 1) {
+            piezaNueva = new PiezaJ();
+        } else if (indice == 2) {
+            piezaNueva = new PiezaL();
+        } else if (indice == 3) {
+            piezaNueva = new PiezaO();
+        } else if (indice == 4) {
+            piezaNueva = new PiezaS();
+        } else if (indice == 5) {
+            piezaNueva = new PiezaT();
+        } else if (indice == 6) {
+            piezaNueva = new PiezaZ();
         }
+
         piezaNueva.x = (anchoTablero - piezaNueva.getAncho()) / 2;
         piezaNueva.y = 0;
         jugador.setPiezaActual(piezaNueva);
