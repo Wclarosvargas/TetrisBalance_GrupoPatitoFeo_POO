@@ -5,24 +5,15 @@ import Bloques.PiezaPadre;
 
 public class Jugador {
     private String nombre;
-    private int puntaje;
     private PiezaPadre piezaActual;
-    private PiezaPadre piezaSiguiente;
 
 
     public Jugador(String nombre) {
         this.nombre = nombre;
-        this.puntaje = 0;
     }
 
     public String getNombre() {
         return nombre;
-    }
-    public int getPuntaje() {
-        return puntaje;
-    }
-    public void sumarPuntos(int puntos) {
-        this.puntaje += puntos;
     }
     public PiezaPadre getPiezaActual() {
         return piezaActual;
@@ -32,11 +23,4 @@ public class Jugador {
         this.piezaActual = piezaActual;
     }
 
-    public PiezaPadre getPiezaSiguiente() {
-        return piezaSiguiente;
-    }
-
-    public void setPiezaSiguiente(PiezaPadre piezaSiguiente) {
-        this.piezaSiguiente = piezaSiguiente;
-    }
 }

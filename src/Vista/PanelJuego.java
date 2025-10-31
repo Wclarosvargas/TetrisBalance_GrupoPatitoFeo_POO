@@ -10,15 +10,10 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
-
-// Clases de la raíz (sin paquete)
 import main.MenuUI;
-import motorJuego.LogicaJuego;
 
 
 public class PanelJuego extends JPanel {
-
-    // --- REFERENCIA AL MODELO ---
     private LogicaJuego motor;
 
     // --- CONSTANTES Y VARIABLES DE LA VISTA ---
@@ -30,39 +25,29 @@ public class PanelJuego extends JPanel {
 
     /* ------------------ Constructor de la Vista ---------------------------*/
     public PanelJuego() {
-        // 1. Crear el Modelo (el cerebro)
         motor = new LogicaJuego();
 
-        // 2. Vincular la Vista con el Modelo
-        motor.setPanel(this); // Le pasamos este panel al motor para los repaints
+        motor.setPanel(this);
 
-        // 3. Configurar el panel (Vista)
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
         try {
-            imagenFondo = new ImageIcon(getClass().getResource("/resources/fondoMarino.jpg")).getImage();
+            imagenFondo = new ImageIcon(getClass().getResource("/resources/game.png")).getImage();
         } catch (Exception errorImagen) {
             errorImagen.printStackTrace();
             System.err.println("Error al cargar la imagen de fondo. Se usara el color negro");
             imagenFondo = null;
             setBackground(Color.BLACK);
         }
-
-        // 4. Configurar el Controlador (Teclado)
         setFocusable(true);
         requestFocusInWindow();
         controlesTeclado();
     }
 
-    /**
-     * Getter para que main.VentanaPrincipal acceda al motor
-     */
     public LogicaJuego getMotor() {
         return motor;
     }
 
-    /**
-     * (CONTROLADOR) Captura las teclas y las delega al Motor.
-     */
+
     private void controlesTeclado() {
         addKeyListener(new KeyAdapter() {
             @Override
@@ -83,7 +68,7 @@ public class PanelJuego extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        // 1. Dibujar fondo
+        // Dibuja el fondo
         if (imagenFondo != null) {
             g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -91,13 +76,13 @@ public class PanelJuego extends JPanel {
             g2d.fillRect(0, 0, getWidth(), getHeight());
         }
 
-        // 2. Aplicar rotación (pidiendo el ángulo al motor)
+        //  Aplicar rotación
         AffineTransform original = g2d.getTransform();
         int pivotX = anchoPanel / 2;
         int pivotY = altoPanel;
         g2d.rotate(motor.getAnguloInclinacion(), pivotX, pivotY); // <-- Pide al Motor
 
-        // 3. Dibujar plataforma (pidiendo el tablero al motor)
+        // Dibujar plataforma (pidiendo el tablero al motor)
         Color[][] tablero = motor.getTablero(); // <-- Pide al Motor
         for (int fila = 0; fila < tablero.length; fila++) {
             for (int columna = 0; columna < tablero[fila].length; columna++) {
@@ -117,7 +102,6 @@ public class PanelJuego extends JPanel {
             for (int fila = 0; fila < forma.length; fila++) {
                 for (int columna = 0; columna < forma[fila].length; columna++) {
                     if (forma[fila][columna] == 1) {
-                        // ¡USANDO GETTERS!
                         int posicionX = (piezaActual.getX() + columna) * tamanioBloque;
                         int posicionY = (piezaActual.getY() + fila) * tamanioBloque;
                         dibujarBloqueConBorde(g2d, posicionX, posicionY, piezaActual.getColor());
@@ -126,10 +110,10 @@ public class PanelJuego extends JPanel {
             }
         }
 
-        // 5. Restaurar transformación
+        // Restaura la transformación
         g2d.setTransform(original);
 
-        // 6. Comprobar si se debe mostrar el diálogo de fin de juego
+        // Comprueba si se debe mostrar el diálogo de fin de juego
         if (motor.isFinDelJuego() && !dialogoMostrado) {
             dialogoMostrado = true;
 
@@ -233,7 +217,6 @@ public class PanelJuego extends JPanel {
         dialog.setVisible(true);
     }
 
-    // Método de utilidad de la Vista
     private JButton createStyledButton(String text, Color bgColor) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Arial", Font.BOLD, 18));

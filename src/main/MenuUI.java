@@ -6,7 +6,7 @@ import java.awt.*;
 public class MenuUI extends main.Menu {
 
     public MenuUI() {
-        super("Tetris main.Menu", 400, 600, "/resources/menu_bg.jpeg");
+        super("Tetris main.Menu", 400, 600, "/resources/tetrisBalanceMenu.jpg");
         setVisible(true);
     }
 

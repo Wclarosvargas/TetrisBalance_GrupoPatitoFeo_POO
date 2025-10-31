@@ -560,7 +560,6 @@ public class PanelJuegoSinGravedad extends JPanel {
                     }
                 }
             }
-            manejoTurnos.getJugadorActual().sumarPuntos(10);
             inclinarPlataforma();
             manejoTurnos.getJugadorActual().setPiezaActual(null);
             if (finDelJuego==false)

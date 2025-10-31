@@ -53,7 +53,7 @@ public class VentanaPrincipal extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(154, 147, 146));
+        panel.setBackground(new Color(55, 47, 47));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 15, 20, 15));
         panel.setPreferredSize(new Dimension(200, 100));
 

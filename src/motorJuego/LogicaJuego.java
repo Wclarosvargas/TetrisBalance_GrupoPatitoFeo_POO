@@ -256,7 +256,6 @@ public class LogicaJuego {
                 }
             }
         }
-        manejoTurnos.getJugadorActual().sumarPuntos(10);
         inclinarPlataforma();
         manejoTurnos.getJugadorActual().setPiezaActual(null);
         if (finDelJuego == false) {
@@ -382,7 +381,6 @@ public class LogicaJuego {
     public String getRazonFinJuego() { return razonFinJuego; }
     public int getSegundosTranscurridos() { return segundosTranscurridos; }
     public Jugador getJugador1() { return manejoTurnos.getJugador1(); }
-    public Jugador getJugador2() { return manejoTurnos.getJugador2(); }
     public ManejoTurnos getManejoTurnos() { return manejoTurnos; }
 
 
