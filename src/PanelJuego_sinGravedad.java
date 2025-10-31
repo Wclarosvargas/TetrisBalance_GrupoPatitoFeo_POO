@@ -4,8 +4,6 @@ import java.util.Random;
 import javax.swing.*;
 
 import Bloques.*;
-import java.io.File;
-import javax.imageio.ImageIO;
 
 public class PanelJuego extends JPanel {
     //Definición del panel de juego
@@ -14,8 +12,6 @@ public class PanelJuego extends JPanel {
     private static final int tamanioBloque = 20;
     private static final int anchoTablero = anchoPanel / tamanioBloque;
     private static final int altoTablero = altoPanel / tamanioBloque;
-    private Image fondo;
-
 
     private Color[][] tablero; // guarda estado de celdas (null = vacio)
 
@@ -38,25 +34,14 @@ public class PanelJuego extends JPanel {
 
     private ManejoTurnos manejoTurnos;
 
-    private Timer gameTimer; // Timer para movimientos del teclado
-    private Timer gravityTimer; // Timer para la gravedad automática
-    
-    // Configuración de velocidad de caída
-    private static final int VELOCIDAD_GRAVEDAD = 500; // milisegundos entre caídas (ajustable)
-    private static final int VELOCIDAD_RAPIDA = 50; // velocidad cuando se presiona abajo
+    private Timer gameTimer; // Referencia al timer del juego
 
 
     /* ------------------ Constructor ---------------------------*/
     public PanelJuego() {
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
-    
-        try {
-            fondo = ImageIO.read(new File("C:\\Users\\bruno\\TetrisBalance_GrupoPatitoFeo_POO\\src\\resources\\pintura-mar-nubes-oceano-fondo_384401-4657.png"));
-            System.out.println("Fondo cargado con ImageIO: " + fondo);
-        } catch (Exception e) {
-            System.out.println("No se pudo cargar la imagen de fondo con ImageIO.");
-            e.printStackTrace();
-        }
+        setBackground(Color.BLACK);
+
         tablero = new Color[altoTablero][anchoTablero];
         inicializarPlataforma();
 
@@ -76,13 +61,8 @@ public class PanelJuego extends JPanel {
         controlesTeclado();
         generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
 
-        // Timer para movimientos laterales y rotación
         gameTimer = new Timer(50, e -> actualizarMovimiento());
         gameTimer.start();
-        
-        // Timer para gravedad automática
-        gravityTimer = new Timer(VELOCIDAD_GRAVEDAD, e -> aplicarGravedad());
-        gravityTimer.start();
     }
 
 
@@ -104,7 +84,7 @@ public class PanelJuego extends JPanel {
         for (int fila = 0; fila < altoPlataformaEnBloques; fila++) {
             for (int columna = 0; columna < anchoPlataformaEnBloques; columna++) {
                 if (formaPlataforma[fila][columna] == 1) {
-                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(150, 75, 0);
+                    tablero[filaInicial + fila][columnaInicial + columna] = new Color(141, 50, 50);
                 }
             }
         }
@@ -171,8 +151,7 @@ public class PanelJuego extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
-        Graphics2D  g2d = (Graphics2D) g;
+        Graphics2D g2d = (Graphics2D) g;
 
         // Guardamos la transformación original para restaurar luego
         AffineTransform original = g2d.getTransform();
@@ -220,7 +199,6 @@ public class PanelJuego extends JPanel {
         if (finDelJuego && !dialogoMostrado) {
             dialogoMostrado = true;
             gameTimer.stop(); // Detener el timer del juego
-            gravityTimer.stop(); // Detener la gravedad
             
             // Mostrar diálogo en el hilo de eventos
             SwingUtilities.invokeLater(() -> {
@@ -229,7 +207,21 @@ public class PanelJuego extends JPanel {
         }
     }
 
-    
+    // ------ Metodo para dibujar una pieza
+    private void dibujarPieza(Graphics2D g2d, PiezaPadre pieza){
+        g2d.setColor(pieza.getColor());
+        int[][] forma = pieza.getForma();
+
+        for (int fila = 0; fila < forma.length; fila++) {
+            for (int columna = 0; columna < forma[fila].length; columna++) {
+                if (forma[fila][columna] == 1) {
+                    int posicionX = (pieza.x + columna) * tamanioBloque;
+                    int posicionY = (pieza.y + fila) * tamanioBloque;
+                    dibujarBloqueConBorde(g2d, posicionX, posicionY, pieza.getColor());
+                }
+            }
+        }
+    }
 
     /*------------------ Ventana emergente de Fin de juego -----------------------*/
     private void mostrarDialogoGameOver() {
@@ -289,7 +281,6 @@ public class PanelJuego extends JPanel {
                 }
             }
             gameTimer.restart();
-            gravityTimer.restart();
 
             new VentanaPrincipal();
         });
@@ -303,7 +294,6 @@ public class PanelJuego extends JPanel {
                 }
             }
             gameTimer.restart();
-            gravityTimer.restart();
 
             new MenuUI();
         });
@@ -353,100 +343,23 @@ public class PanelJuego extends JPanel {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
                 int key = e.getKeyCode();
-
-                if (manejoTurnos.getJugadorActual() == manejoTurnos.getJugador1()){
-                    if (key == java.awt.event.KeyEvent.VK_A) moverIzq = true;
-                    if (key == java.awt.event.KeyEvent.VK_D) moverDer = true;
-                    //if (key == java.awt.event.KeyEvent.VK_UP) moverArriba = true;
-                    if (key == java.awt.event.KeyEvent.VK_S) {
-                        moverAbajo = true;
-                        // Acelerar la caída cuando se presiona abajo
-                        gravityTimer.setDelay(VELOCIDAD_RAPIDA);
-                        
-                    }
-                    if (key == java.awt.event.KeyEvent.VK_W) rotar = true;
-                } else {
-                    if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = true;
-                    if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = true;
-                    //if (key == java.awt.event.KeyEvent.VK_UP) moverArriba = true;
-                    if (key == java.awt.event.KeyEvent.VK_DOWN) {
-                        moverAbajo = true;
-                        // Acelerar la caída cuando se presiona abajo
-                        gravityTimer.setDelay(VELOCIDAD_RAPIDA);
-                    }
-                    if (key == java.awt.event.KeyEvent.VK_UP) rotar = true;
-
-                }
-                //if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = true;
+                if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = true;
+                if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = true;
+                if (key == java.awt.event.KeyEvent.VK_UP) moverArriba = true;
+                if (key == java.awt.event.KeyEvent.VK_DOWN) moverAbajo = true;
+                if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = true;
             }
-
 
             @Override
             public void keyReleased(java.awt.event.KeyEvent e) {
                 int key = e.getKeyCode();
-                
-                // Para jugador 1
-                if (key == java.awt.event.KeyEvent.VK_A || key == java.awt.event.KeyEvent.VK_D || key == java.awt.event.KeyEvent.VK_W) {
-                    if (key == java.awt.event.KeyEvent.VK_A) moverIzq = false;
-                    if (key == java.awt.event.KeyEvent.VK_D) moverDer = false;
-                    if (key == java.awt.event.KeyEvent.VK_W) rotar = false;
-
-                }
-                
-                if (key == java.awt.event.KeyEvent.VK_S) {
-                    moverAbajo = false;
-                    gravityTimer.setDelay(VELOCIDAD_GRAVEDAD);
-                }
-                
-                // Para jugador 2
-                if (key == java.awt.event.KeyEvent.VK_LEFT || key == java.awt.event.KeyEvent.VK_RIGHT || key == java.awt.event.KeyEvent.VK_UP) {
-                    if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = false;
-                    if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = false;
-                    if (key == java.awt.event.KeyEvent.VK_UP) rotar = false;
-
-                }
-                
-                if (key == java.awt.event.KeyEvent.VK_DOWN) {
-                    moverAbajo = false;
-                    gravityTimer.setDelay(VELOCIDAD_GRAVEDAD);
-                }
-                
-                //if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = false;
+                if (key == java.awt.event.KeyEvent.VK_LEFT) moverIzq = false;
+                if (key == java.awt.event.KeyEvent.VK_RIGHT) moverDer = false;
+                if (key == java.awt.event.KeyEvent.VK_UP) moverArriba = false;
+                if (key == java.awt.event.KeyEvent.VK_DOWN) moverAbajo = false;
+                if (key == java.awt.event.KeyEvent.VK_SPACE) rotar = false;
             }
         });
-    }
-
-    public void resetearTeclas() {
-        moverIzq = false;
-        moverDer = false;
-        moverAbajo = false;
-        rotar = false;
-        gravityTimer.setDelay(VELOCIDAD_GRAVEDAD);
-    }
-
-    // Gravedad
-    private void aplicarGravedad() {
-        if (finDelJuego) {
-            return;
-        }
-
-        PiezaPadre piezaActual = manejoTurnos.getJugadorActual().getPiezaActual();
-        if (piezaActual == null) return;
-
-        boolean puedeMoverAbajo = !hayColision(piezaActual.x, piezaActual.y + 1);
-
-        if (puedeMoverAbajo) {
-            piezaActual.moverAbajo();
-        } else {
-            // La pieza llegó al fondo o colisionó
-            if (piezaTocaSuelo(piezaActual)) {
-                finDelJuego = true;
-            } else {
-                fijarPieza();
-            }
-        }
-
-        repaint();
     }
 
     private void actualizarMovimiento() {
@@ -566,7 +479,6 @@ public class PanelJuego extends JPanel {
         manejoTurnos.getJugadorActual().setPiezaActual(null);
         if (finDelJuego==false)
             manejoTurnos.cambiarTurno();
-            resetearTeclas();
         generarNuevaPiezaParaJugador(manejoTurnos.getJugadorActual());
     }
 
@@ -582,7 +494,6 @@ public class PanelJuego extends JPanel {
     public ManejoTurnos getManejoTurnos() {
         return manejoTurnos;
     }
-    
     private void inclinarPlataforma() {
         int pesoIzq = 0;
         int pesoDer = 0;
@@ -612,9 +523,6 @@ public class PanelJuego extends JPanel {
             finDelJuego = true;
         }
     }
-    
 
 
-
-    
 }
