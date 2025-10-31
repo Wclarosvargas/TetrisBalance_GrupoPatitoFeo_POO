@@ -1,4 +1,8 @@
 import Bloques.*;
+import main.MenuUI;
+import main.VentanaPrincipal;
+import motorJuego.Jugador;
+import motorJuego.ManejoTurnos;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,8 +58,8 @@ public class PanelJuegoSinGravedad extends JPanel {
                 pesoColumnas[i] = 0;
             }
 
-            Jugador j1 = new Jugador("Jugador 1");
-            Jugador j2 = new Jugador("Jugador 2");
+            Jugador j1 = new Jugador("motorJuego.Jugador 1");
+            Jugador j2 = new Jugador("motorJuego.Jugador 2");
             manejoTurnos = new ManejoTurnos(j1, j2);
 
             piezaActual = null;

@@ -1,6 +1,6 @@
-import Bloques.PiezaPadre;
+package motorJuego;
 
-import java.awt.*;
+import Bloques.PiezaPadre;
 
 
 public class Jugador {
