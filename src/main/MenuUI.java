@@ -1,10 +1,12 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class MenuUI extends Menu {
+public class MenuUI extends main.Menu {
 
     public MenuUI() {
-        super("Tetris Menu", 400, 600, "/resources/menu_bg.jpeg");
+        super("Tetris main.Menu", 400, 600, "/resources/tetrisBalanceMenu.jpg");
         setVisible(true);
     }
 
@@ -38,7 +40,7 @@ public class MenuUI extends Menu {
         });
 
         helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Controles:\nJugador 1:\n A S D Mover\nW Rotar bloque\nJugador 2:\n← → ↓ Mover\n↑ Rotar bloque"));
+                "Controles:\nmotorJuego.Jugador 1:\n A S D Mover\nW Rotar bloque\nmotorJuego.Jugador 2:\n← → ↓ Mover\n↑ Rotar bloque"));
 
         exitBtn.addActionListener(e -> System.exit(0));
     }

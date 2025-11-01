@@ -6,7 +6,7 @@ public class PiezaI extends PiezaPadre{
         this.forma = new int[][]{
                 {1,1,1,1}
         };
-        this.color = new Color(0,255,255);
+        this.color = new Color(15, 150, 220);
         this.peso = 1;
     }
 }

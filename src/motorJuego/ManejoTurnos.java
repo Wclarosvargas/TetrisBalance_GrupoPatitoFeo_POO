@@ -1,3 +1,5 @@
+package motorJuego;
+
 public class ManejoTurnos {
     private Jugador jugador1;
     private Jugador jugador2;
