@@ -13,9 +13,9 @@ public abstract class Menu extends JFrame {
     private Image backgroundImage;
 
     /*
-    -Constructor general para los menús.
+    -Constructor general para los menús.s
     @param titulo título de la ventana
-    @param ancho ancho en píxeles
+    @param anchoa ancho en píxeles
     @param alto alto en píxeles
     @param rutaFondo ruta de la imagen de fondo (por ejemplo "/resources/menu_bg.jpeg")
     */

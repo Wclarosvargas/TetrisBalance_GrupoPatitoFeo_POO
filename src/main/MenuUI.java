@@ -41,7 +41,7 @@ public class MenuUI extends main.Menu {
         });
 
         helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                "Controles:\nmotorJuego.Jugador 1:\n A S D Mover\nW Rotar bloque\nmotorJuego.Jugador 2:\n← → ↓ Mover\n↑ Rotar bloque"));
+                "Controles:\nJugador 1:\nA S D Mover\nW Rotar bloque\n-----------------------\nJugador 2:\n← → ↓ Mover\n↑ Rotar bloque"));
 
         exitBtn.addActionListener(e -> System.exit(0));
     }
