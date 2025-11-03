@@ -22,3 +22,8 @@
 [31/10/2025 19:33:43] - Ganador: motorJuego.Jugador 1 - Razón: Plataforma desequilibrada - Duración: 00:03
 [31/10/2025 19:34:05] - Ganador: motorJuego.Jugador 1 - Razón: Plataforma desequilibrada - Duración: 00:14
 [31/10/2025 19:34:15] - Ganador: motorJuego.Jugador 1 - Razón: Fondo alcanzado (bajada rápida) - Duración: 00:06
+[02/11/2025 21:17:26] - Ganador: motorJuego.Jugador 2 - Razón: Fondo alcanzado (bajada rápida) - Duración: 00:18
+[02/11/2025 21:18:41] - Ganador: motorJuego.Jugador 2 - Razón: Fondo alcanzado - Duración: 00:05
+[02/11/2025 21:18:58] - Ganador: motorJuego.Jugador 1 - Razón: Fondo alcanzado - Duración: 00:14
+[02/11/2025 21:19:28] - Ganador: motorJuego.Jugador 2 - Razón: Plataforma desequilibrada - Duración: 00:26
+[02/11/2025 21:22:44] - Ganador: motorJuego.Jugador 1 - Razón: Plataforma desequilibrada - Duración: 03:10

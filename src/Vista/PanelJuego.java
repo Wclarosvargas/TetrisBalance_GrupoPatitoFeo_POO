@@ -1,4 +1,4 @@
-package vista; // <-- ¡NUEVA LÍNEA DE PAQUETE!
+package Vista;
 
 // --- IMPORTS NECESARIOS ---
 import main.VentanaPrincipal;

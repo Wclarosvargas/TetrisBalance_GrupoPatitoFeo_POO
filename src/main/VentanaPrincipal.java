@@ -6,7 +6,7 @@ import java.awt.*;
 
 // --- ¡IMPORTS ACTUALIZADOS! ---
 import motorJuego.Jugador;
-import vista.PanelJuego;   // Importa el Panel de la carpeta 'vista'
+import Vista.PanelJuego;   // Importa el Panel de la carpeta 'Vista'
 import motorJuego.LogicaJuego;
 
 public class VentanaPrincipal extends JFrame {
