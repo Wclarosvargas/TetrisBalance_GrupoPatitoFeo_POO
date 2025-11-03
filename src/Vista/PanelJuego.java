@@ -31,7 +31,7 @@ public class PanelJuego extends JPanel {
 
         setPreferredSize(new Dimension(anchoPanel, altoPanel));
         try {
-            imagenFondo = new ImageIcon(getClass().getResource("/resources/game.png")).getImage();
+            imagenFondo = new ImageIcon(getClass().getResource("/resources/Fondo_Juego.jpg")).getImage();
         } catch (Exception errorImagen) {
             errorImagen.printStackTrace();
             System.err.println("Error al cargar la imagen de fondo. Se usara el color negro");
