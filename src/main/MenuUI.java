@@ -12,6 +12,7 @@ public class MenuUI extends main.Menu {
 
     @Override
     protected void inicializarComponentes(JPanel fondo) {
+        
         // Panel del menú
         JPanel menuPanel = new JPanel(new GridLayout(4, 1, 10, 10));
         menuPanel.setOpaque(false);

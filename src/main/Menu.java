@@ -4,20 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Clase base para todos los menús del juego.
- * Proporciona: configuración de ventana, fondo, y estilo uniforme de botones.
+Clase base para todos los menús del juego.
+Proporciona: configuración de ventana, fondo, y estilo uniforme de botones.
  */
+
 public abstract class Menu extends JFrame {
 
     private Image backgroundImage;
 
-    /**
-     * Constructor general para los menús.
-     * @param titulo título de la ventana
-     * @param ancho ancho en píxeles
-     * @param alto alto en píxeles
-     * @param rutaFondo ruta de la imagen de fondo (por ejemplo "/resources/menu_bg.jpeg")
-     */
+    /*
+    -Constructor general para los menús.
+    @param titulo título de la ventana
+    @param ancho ancho en píxeles
+    @param alto alto en píxeles
+    @param rutaFondo ruta de la imagen de fondo (por ejemplo "/resources/menu_bg.jpeg")
+    */
+
     public Menu(String titulo, int ancho, int alto, String rutaFondo) {
         setTitle(titulo);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -48,14 +50,13 @@ public abstract class Menu extends JFrame {
         inicializarComponentes(backgroundPanel);
     }
 
-    /**
-     * Método que deben implementar las subclases para agregar sus botones, paneles, etc.
-     */
+    
+    //Método que deben implementar las subclases para agregar sus botones, paneles, etc.
+
     protected abstract void inicializarComponentes(JPanel fondo);
 
-    /**
-     * Crea un botón con estilo uniforme (fuente, color, bordes, efecto hover, etc.)
-     */
+    //Crea un botón con estilo uniforme (fuente, color, bordes, efecto hover, etc.)
+
     protected JButton crearBoton(String texto) {
         JButton btn = new JButton(texto);
         btn.setFont(new Font("Arial", Font.BOLD, 20));

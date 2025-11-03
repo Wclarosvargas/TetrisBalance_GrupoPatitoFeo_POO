@@ -1,7 +1,7 @@
 package motorJuego;
 
 import Bloques.*;
-import javax.swing.Timer; // Solo importamos Timer
+import javax.swing.Timer;
 import java.awt.Color;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -82,7 +82,7 @@ public class LogicaJuego {
         this.panelRepintar = panel;
     }
 
-    // ================ Metodos del juego ==========
+    // ==== Metodos del juego ====
 
     private void inicializarPlataforma() {
         int[][] formaPlataforma = {
@@ -131,7 +131,7 @@ public class LogicaJuego {
             if (jugador == manejoTurnos.getJugadorActual()) {
                 piezaActual = piezaNueva;
             }
-            // ¡USANDO GETTERS!
+
             if (hayColision(piezaNueva.getX(), piezaNueva.getY())) {
                 terminarJuego("Bloqueo inicial");
             }
@@ -145,7 +145,6 @@ public class LogicaJuego {
         if (finDelJuego) return;
         if (piezaActual == null) return;
 
-        // ¡USANDO GETTERS!
         boolean puedeMoverAbajo = !hayColision(piezaActual.getX(), piezaActual.getY() + 1);
 
         if (puedeMoverAbajo) {
@@ -157,14 +156,13 @@ public class LogicaJuego {
                 fijarPieza();
             }
         }
-        if (panelRepintar != null) panelRepintar.repaint(); // ¡Pide repintar!
+        if (panelRepintar != null) panelRepintar.repaint(); 
     }
 
     private void actualizarMovimiento() {
         if (finDelJuego) return;
         if (piezaActual == null) return;
 
-        // ¡USANDO GETTERS!
         int x = piezaActual.getX();
         int y = piezaActual.getY();
 
@@ -191,13 +189,13 @@ public class LogicaJuego {
         }
         if (rotar) {
             piezaActual.rotar();
-            // ¡USANDO GETTERS!
+
             if (hayColision(piezaActual.getX(), piezaActual.getY())) {
                 piezaActual.rotar(); // Des-rotar
             }
             rotar = false;
         }
-        if (panelRepintar != null) panelRepintar.repaint(); // ¡Pide repintar!
+        if (panelRepintar != null) panelRepintar.repaint(); 
     }
 
     private boolean piezaTocaSuelo(PiezaPadre pieza) {
@@ -205,7 +203,7 @@ public class LogicaJuego {
         for (int fila = 0; fila < forma.length; fila++) {
             for (int columna = 0; columna < forma[fila].length; columna++) {
                 if (forma[fila][columna] == 1) {
-                    // ¡USANDO GETTER!
+
                     int yRelativo = pieza.getY() + fila;
                     if (yRelativo == altoTablero - 1) {
                         return true;
@@ -245,7 +243,7 @@ public class LogicaJuego {
         for (int fila = 0; fila < forma.length; fila++) {
             for (int columna = 0; columna < forma[fila].length; columna++) {
                 if (forma[fila][columna] == 1) {
-                    // ¡USANDO GETTERS!
+
                     int xRelativo = piezaActual.getX() + columna;
                     int yRelativo = piezaActual.getY() + fila;
 

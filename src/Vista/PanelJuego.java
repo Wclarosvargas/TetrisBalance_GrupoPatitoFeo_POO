@@ -1,10 +1,8 @@
-package vista; // <-- ¡NUEVA LÍNEA DE PAQUETE!
-
-// --- IMPORTS NECESARIOS ---
+package vista;
 import main.VentanaPrincipal;
-import motorJuego.LogicaJuego;     // Importa el Modelo
-import motorJuego.Jugador;        // Importa motorJuego.Jugador (para el diálogo)
-import Bloques.PiezaPadre;   // Importa PiezaPadre (para dibujar)
+import motorJuego.LogicaJuego;
+import motorJuego.Jugador;
+import Bloques.PiezaPadre;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -16,7 +14,6 @@ import main.MenuUI;
 public class PanelJuego extends JPanel {
     private LogicaJuego motor;
 
-    // --- CONSTANTES Y VARIABLES DE LA VISTA ---
     private static final int anchoPanel = 400;
     private static final int altoPanel = 600;
     private static final int tamanioBloque = 20;
@@ -93,7 +90,7 @@ public class PanelJuego extends JPanel {
             }
         }
 
-        // 4. Dibujar pieza actual (pidiendo la pieza al motor)
+        // Dibujar pieza actual (pidiendo la pieza al motor)
         PiezaPadre piezaActual = motor.getPiezaActual(); // <-- Pide al Motor
         if (piezaActual != null) {
             g2d.setColor(piezaActual.getColor());

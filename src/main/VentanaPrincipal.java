@@ -3,8 +3,6 @@ package main;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-
-// --- ¡IMPORTS ACTUALIZADOS! ---
 import motorJuego.Jugador;
 import vista.PanelJuego;   // Importa el Panel de la carpeta 'vista'
 import motorJuego.LogicaJuego;
@@ -48,8 +46,6 @@ public class VentanaPrincipal extends JFrame {
     }
 
     private JPanel crearPanelInfo() {
-        // ... (Tu código exacto para crearPanelInfo) ...
-        // (Este código ya está bien, lo incluyo por completitud)
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -117,13 +113,9 @@ public class VentanaPrincipal extends JFrame {
         return panel;
     }
 
-    /**
-     * ACTUALIZADO para hablar con el Motor a través del Panel
-     */
     private void actualizarUI() {
         if (panelJuego != null && panelJuego.getMotor() != null) {
 
-            // ¡AHORA SE ACCEDE ASÍ!
             LogicaJuego motor = panelJuego.getMotor();
 
             // Actualizar el temporizador
